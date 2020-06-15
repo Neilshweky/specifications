@@ -1,0 +1,292 @@
+database_name: "test"
+
+collection_name: &collection_name 'quux'
+
+tests:
+-
+  description: "Aggregate with pipline (project, sort, limit)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $project: { _id: 0 }
+          - $sort: { year: 1, a: 1 }
+          - $limit: 2
+  outcome:
+    result:
+      - { a: 1, b: 2, c: 3, year: 2017 }
+      - { a: 2, b: 3, c: 4, year: 2017 }
+-
+  description: "Aggregate with pipline (unset, sort, limit)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $unset: 'b'
+          - $sort: { year: 1, a: 1 }
+          - $limit: 2
+  outcome:
+    result:
+      - { a: 1, c: 3, year: 2017 }
+      - { a: 2, c: 4, year: 2017 }
+-
+  description: "Aggregate with pipeline (match, project, sort, limit)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $match: { year: 2018 }
+          - $project: { _id: 0 }
+          - $sort: { year: 1, a: 1 }
+          - $limit: 2
+  outcome:
+    result:
+      - { a: 11, b: 12, c: 3, year: 2018 }
+      - { a: 12, b: 13, c: 4, year: 2018 }
+-
+  description: "Aggregate with pipeline (match with expr, project, sort, limit)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $match: { $expr: { $and: [$a, $b] } }
+          - $project: { _id: 0 }
+          - $sort: { year: 1, a: 1 }
+          - $limit: 2
+  outcome:
+    result:
+      - { a: 1, b: 2, c: 3, year: 2017 }
+      - { a: 2, b: 3, c: 4, year: 2017 }
+-
+  description: "Aggregate with pipeline (sort, project, limit)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $sort: { year: {$numberDecimal: '1' }, a: { $numberDecimal: '1'} }
+          - $project: { _id: 0 }
+          - $sort: { year: 1, a: 1 }
+          - $limit: 2
+  outcome:
+    result:
+      - { a: 1, b: 2, c: 3, year: 2017 }
+      - { a: 2, b: 3, c: 4, year: 2017 }
+-
+  description: "Aggregate with pipeline (project, sort, skip, limit)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $project: { _id: 0 }
+          - $sort: { year: 1, a: 1 }
+          - $skip: 2  
+          - $limit: 2
+  outcome:
+    result:
+      - { a: 3, b: 4, c: 5, year: 2017 }
+      - { a: 4, b: 5, c: 6, year: 2017 }
+-
+  description: "Aggregate with pipeline (project with $not, $gt, sort, limit)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $project: { _id: 0, a: 1, result: { $not: [{$gt: [$a, 3]}] } }
+          - $sort: { a: 1 }
+          - $limit: 4
+  outcome:
+    result:
+      - { a: 1, result: true }
+      - { a: 2, result: true }
+      - { a: 3, result: true }
+      - { a: 4, result: false }
+-
+  description: "Aggregate with pipeline (project with $not, $lte, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $project: { _id: 0, a: 1, result: { $not: [{$lte: [$a, 7]}] } }
+          - $sort: { a: 1 }
+  outcome:
+    result:
+      - { a: 1, result: false }
+      - { a: 2, result: false }
+      - { a: 3, result: false }
+      - { a: 4, result: false }
+      - { a: 5, result: false }
+      - { a: 6, result: false }
+      - { a: 7, result: false }
+      - { a: 8, result: true }
+      - { a: 9, result: true }
+      - { a: 10, result: true }
+      - { a: 11, result: true }
+      - { a: 12, result: true }
+      - { a: 13, result: true }
+      - { a: 14, result: true }
+      - { a: 15, result: true }
+-
+  description: "Aggregate with pipeline (project with $not, $doesnotexist, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $project: { _id: 0, a: 1, result: { $not: { $lte: [ $doesnotexist, 7 ] } } }
+          - $sort: { a: 1 }
+  outcome:
+    result:
+      - { a: 1, result: false }
+      - { a: 2, result: false }
+-
+  description: "Aggregate with pipeline (group, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $group: { _id: 1, n: { $sum: 1 } }
+          - $sort: { a: 1 }
+  outcome:
+    result:
+      - { n: 15, _id: 1 }
+-
+  description: "Aggregate with pipeline (group, sum, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $group: { _id: { a: $a, b: $b }, n: { $sum: 1 } }
+          - $sort: { a: 1 }
+  outcome:
+    result:
+      - { n: 15, _id: 1 }
+-
+  description: "Aggregate with pipeline _id is null (group, sum, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $group: { _id: null, foo: { $sum: 1 } }
+          - $sort: { a: 1 }
+  outcome:
+    result:
+      - { foo: 15, _id: null }
+-
+  description: "Aggregate with pipeline (group, avg, sum, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $group: {_id: $year, avg_a: {$avg: $a}, sum_a: {$sum: $a}, popDev_a: {$stdDevPop: $a}, sampDev_a: {$stdDevSamp: $a} }
+          - $sort: { a: 1 }
+  outcome:
+    result:
+      - { foo: 15, _id: null }
+-
+  description: "Aggregate with pipeline (group, sum, match)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $group: { _id: $year, sum_d: { $sum: $d } }
+          - $match: { _id: 2017 }
+  outcome:
+    result:
+      - { foo: 15, _id: null }
+-
+  description: "Aggregate with pipeline (project, match, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $project: { year2: $year, a: 1, _id: 0 }
+          - $match: { _id: 2017 }
+          - $sort: { a: 1 }
+  outcome:
+    result:
+      - { foo: 15, _id: null }
+-
+  description: "Aggregate with pipeline (addFields, match, project, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $addFields: { year2: $year }
+          - $match: { year2: 2017 }
+          - $project: { _id: 0 }
+          - $sort: { a: 1 }
+  outcome:
+    result:
+      - { foo: 15, _id: null }
+-
+  description: "Aggregate with pipeline (replaceRoot, match, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $replaceRoot: { newRoot: { foo: $year, bar: $a } }
+          - $match: { foo: 2017 }
+          - $sort: { bar: 1 }
+  outcome:
+    result:
+      - { foo: 15, _id: null }
+-
+  description: "Aggregate with lookup and pipeline (match, project, sort)"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $lookup: { from: dates, let: { year: $year }, pipeline: [{ $match: { $expr: { $eq: [$year, $$year] } } }, { $lookup: { from: ranges, let: { a: $a }, pipeline: [{ $match: { $expr: { $eq: [$a, $$a] } } }, { $project: {_id: 0} }, { $sort: {a: 1} }], as: nested_docs}}, { $project: { _id: 0 }}, { $sort: { a: 1 } }], as: docs }
+          - $project: { _id: 0 }
+          - $sort: { year: 1, a: 1 }
+  outcome:
+    result:
+      - { foo: 15, _id: null }
+-
+  description: "Aggregate with unwind and project"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $unwind: $a
+          - $project: { _id: 0 }
+  outcome:
+    result:
+      - { foo: 15, _id: null }

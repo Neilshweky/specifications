@@ -1,0 +1,547 @@
+{
+  "collection_name": "quux",
+  "database_name": "test",
+  "tests": [
+    {
+      "description": "Find with projection and sort",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "find",
+          "arguments": {
+            "projection": {
+              "_id": 0
+            },
+            "sort": {
+              "year": 1,
+              "a": 1
+            }
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "command_started_event": {
+            "command": {
+              "find": "quux"
+            }
+          }
+        }
+      ],
+      "outcome": {
+        "result": [
+          {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "year": 2017
+          },
+          {
+            "a": 2,
+            "b": 3,
+            "c": 4,
+            "year": 2017
+          },
+          {
+            "a": 3,
+            "b": 4,
+            "c": 5,
+            "year": 2017
+          },
+          {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "year": 2017
+          },
+          {
+            "a": 5,
+            "b": 6,
+            "c": 7,
+            "year": 2017
+          },
+          {
+            "a": 6,
+            "b": 7,
+            "c": 8,
+            "year": 2017
+          },
+          {
+            "a": 7,
+            "b": 8,
+            "c": 9,
+            "year": 2017
+          },
+          {
+            "a": 8,
+            "b": 9,
+            "c": 10,
+            "year": 2017
+          },
+          {
+            "a": 9,
+            "b": 10,
+            "c": 11,
+            "year": 2017
+          },
+          {
+            "a": 10,
+            "b": 11,
+            "c": 12,
+            "year": 2017
+          },
+          {
+            "a": 11,
+            "b": 12,
+            "c": 13,
+            "year": 2018
+          },
+          {
+            "a": 12,
+            "b": 13,
+            "c": 14,
+            "year": 2018
+          },
+          {
+            "a": 13,
+            "b": 14,
+            "c": 15,
+            "year": 2018
+          },
+          {
+            "a": 14,
+            "b": 15,
+            "c": 16,
+            "year": 2018
+          },
+          {
+            "a": 15,
+            "b": 16,
+            "c": 17,
+            "year": 2018
+          }
+        ]
+      }
+    },
+    {
+      "description": "Find with filter, projection and sort",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "find",
+          "arguments": {
+            "filter": {
+              "year": 2017
+            },
+            "projection": {
+              "_id": 0
+            },
+            "sort": {
+              "year": 1,
+              "a": 1
+            }
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "command_started_event": {
+            "command": {
+              "find": "quux"
+            }
+          }
+        }
+      ],
+      "outcome": {
+        "result": [
+          {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "year": 2017
+          },
+          {
+            "a": 2,
+            "b": 3,
+            "c": 4,
+            "year": 2017
+          },
+          {
+            "a": 3,
+            "b": 4,
+            "c": 5,
+            "year": 2017
+          },
+          {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "year": 2017
+          },
+          {
+            "a": 5,
+            "b": 6,
+            "c": 7,
+            "year": 2017
+          },
+          {
+            "a": 6,
+            "b": 7,
+            "c": 8,
+            "year": 2017
+          },
+          {
+            "a": 7,
+            "b": 8,
+            "c": 9,
+            "year": 2017
+          },
+          {
+            "a": 8,
+            "b": 9,
+            "c": 10,
+            "year": 2017
+          },
+          {
+            "a": 9,
+            "b": 10,
+            "c": 11,
+            "year": 2017
+          },
+          {
+            "a": 10,
+            "b": 11,
+            "c": 12,
+            "year": 2017
+          }
+        ]
+      }
+    },
+    {
+      "description": "Find with projection and sort using $numberDecimal",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "find",
+          "arguments": {
+            "projection": {
+              "_id": {
+                "$numberDecimal": "0"
+              }
+            },
+            "sort": {
+              "year": {
+                "$numberDecimal": "1"
+              },
+              "a": {
+                "$numberDecimal": "1"
+              }
+            }
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "command_started_event": {
+            "command": {
+              "find": "quux"
+            }
+          }
+        }
+      ],
+      "outcome": {
+        "result": [
+          {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "year": 2017
+          },
+          {
+            "a": 2,
+            "b": 3,
+            "c": 4,
+            "year": 2017
+          },
+          {
+            "a": 3,
+            "b": 4,
+            "c": 5,
+            "year": 2017
+          },
+          {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "year": 2017
+          },
+          {
+            "a": 5,
+            "b": 6,
+            "c": 7,
+            "year": 2017
+          },
+          {
+            "a": 6,
+            "b": 7,
+            "c": 8,
+            "year": 2017
+          },
+          {
+            "a": 7,
+            "b": 8,
+            "c": 9,
+            "year": 2017
+          },
+          {
+            "a": 8,
+            "b": 9,
+            "c": 10,
+            "year": 2017
+          },
+          {
+            "a": 9,
+            "b": 10,
+            "c": 11,
+            "year": 2017
+          },
+          {
+            "a": 10,
+            "b": 11,
+            "c": 12,
+            "year": 2017
+          },
+          {
+            "a": 11,
+            "b": 12,
+            "c": 13,
+            "year": 2018
+          },
+          {
+            "a": 12,
+            "b": 13,
+            "c": 14,
+            "year": 2018
+          },
+          {
+            "a": 13,
+            "b": 14,
+            "c": 15,
+            "year": 2018
+          },
+          {
+            "a": 14,
+            "b": 15,
+            "c": 16,
+            "year": 2018
+          },
+          {
+            "a": 15,
+            "b": 16,
+            "c": 17,
+            "year": 2018
+          }
+        ]
+      }
+    },
+    {
+      "description": "Find with projection, sort and skip",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "find",
+          "arguments": {
+            "projection": {
+              "_id": 0
+            },
+            "sort": {
+              "year": 1,
+              "a": 1
+            },
+            "skip": 2
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "command_started_event": {
+            "command": {
+              "find": "quux"
+            }
+          }
+        }
+      ],
+      "outcome": {
+        "result": [
+          {
+            "a": 3,
+            "b": 4,
+            "c": 5,
+            "year": 2017
+          },
+          {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "year": 2017
+          },
+          {
+            "a": 5,
+            "b": 6,
+            "c": 7,
+            "year": 2017
+          },
+          {
+            "a": 6,
+            "b": 7,
+            "c": 8,
+            "year": 2017
+          },
+          {
+            "a": 7,
+            "b": 8,
+            "c": 9,
+            "year": 2017
+          },
+          {
+            "a": 8,
+            "b": 9,
+            "c": 10,
+            "year": 2017
+          },
+          {
+            "a": 9,
+            "b": 10,
+            "c": 11,
+            "year": 2017
+          },
+          {
+            "a": 10,
+            "b": 11,
+            "c": 12,
+            "year": 2017
+          },
+          {
+            "a": 11,
+            "b": 12,
+            "c": 13,
+            "year": 2018
+          },
+          {
+            "a": 12,
+            "b": 13,
+            "c": 14,
+            "year": 2018
+          },
+          {
+            "a": 13,
+            "b": 14,
+            "c": 15,
+            "year": 2018
+          },
+          {
+            "a": 14,
+            "b": 15,
+            "c": 16,
+            "year": 2018
+          },
+          {
+            "a": 15,
+            "b": 16,
+            "c": 17,
+            "year": 2018
+          }
+        ]
+      }
+    },
+    {
+      "description": "Find with projection, sort and limit",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "find",
+          "arguments": {
+            "projection": {
+              "_id": 0
+            },
+            "sort": {
+              "year": 1,
+              "a": 1
+            },
+            "limit": 2
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "command_started_event": {
+            "command": {
+              "find": "quux"
+            }
+          }
+        }
+      ],
+      "outcome": {
+        "result": [
+          {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "year": 2017
+          },
+          {
+            "a": 2,
+            "b": 3,
+            "c": 4,
+            "year": 2017
+          }
+        ]
+      }
+    },
+    {
+      "description": "Find with projection, sort, skip and limit",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "find",
+          "arguments": {
+            "projection": {
+              "_id": 0
+            },
+            "sort": {
+              "year": 1,
+              "a": 1
+            },
+            "skip": 2,
+            "limit": 2
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "command_started_event": {
+            "command": {
+              "find": "quux"
+            }
+          }
+        }
+      ],
+      "outcome": {
+        "result": [
+          {
+            "a": 3,
+            "b": 4,
+            "c": 5,
+            "year": 2017
+          },
+          {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "year": 2017
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+collection_name: &collection_name "quux"
+database_name: &database_name "test"
+namespace: &namespace "test.quux"
+
+tests:
+  -
+    description: "A successful find event with getMore"
+    operations:
+      -
+        object: collection
+        name: find
+        arguments:
+          filter: { a: { $gte: 2 }}
+          sort: { a: 1 }
+          batchSize: {"$numberLong": "3"}
+          limit: {"$numberLong": "4"}
+    expectations:
+      -
+        command_started_event:
+          command:
+            find: *collection_name
+            filter: { a: { $gte : 2 }}
+            sort: { a: 1 }
+            limit: 4
+            batchSize: 3
+          command_name: "find"
+          database_name: *database_name
+      -
+        command_started_event:
+          command:
+            getMore: { $numberLong: "42" }
+            batchSize: 1
+          command_name: "getMore"
+          database_name: "cursors"

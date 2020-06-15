@@ -1,0 +1,64 @@
+collection_name: &collection_name "nested"
+database_name: &database_name "test"  
+
+tests:
+  -
+    description: "Find nested with projection, sort"
+    operations:
+      -
+        object: collection
+        name: find
+        arguments:
+          projection: { _id: 0, foo.a: 1 }
+          sort: { foo.a: 1 }
+        result:
+          - {"foo": {"a": 1, "b": 2, "c": 3}, "bar": {"a": 4, "b": 5, "c": 6}}
+          - {"foo": {"a": 2, "b": 3, "c": 4}, "bar": {"a": 5, "b": 6, "c": 7}}
+          - {"foo": {"a": 3, "b": 4, "c": 5}, "bar": {"a": 6, "b": 7, "c": 8}}
+          - {"foo": {"a": 4, "b": 5, "c": 6}, "bar": {"a": 7, "b": 8, "c": 9}}
+          - {"foo": {"a": 5, "b": 6, "c": 7}, "bar": {"a": 8, "b": 9, "c": 10}}
+    expectations:
+      -
+        command_started_event:
+          command:
+            find: *collection_name
+  -
+    description: "Find nested projecting out nested attribute, sort"
+    operations:
+      -
+        object: collection
+        name: find
+        arguments:
+          projection: { _id: 0, foo.a: 0 }
+          sort: { foo.b: 1 }
+        result:
+          - {"foo": {"a": 1, "b": 2, "c": 3}, "bar": {"a": 4, "b": 5, "c": 6}}
+          - {"foo": {"a": 2, "b": 3, "c": 4}, "bar": {"a": 5, "b": 6, "c": 7}}
+          - {"foo": {"a": 3, "b": 4, "c": 5}, "bar": {"a": 6, "b": 7, "c": 8}}
+          - {"foo": {"a": 4, "b": 5, "c": 6}, "bar": {"a": 7, "b": 8, "c": 9}}
+          - {"foo": {"a": 5, "b": 6, "c": 7}, "bar": {"a": 8, "b": 9, "c": 10}}
+    expectations:
+      -
+        command_started_event:
+          command:
+            find: *collection_name
+  -
+    description: "Find nested projecting out nested attribute, sort descending"
+    operations:
+      -
+        object: collection
+        name: find
+        arguments:
+          projection: { _id: 0, foo.a: 0 }
+          sort: { foo.a: -1 }
+        result:
+          - {"foo": {"a": 5, "b": 6, "c": 7}, "bar": {"a": 8, "b": 9, "c": 10}}
+          - {"foo": {"a": 4, "b": 5, "c": 6}, "bar": {"a": 7, "b": 8, "c": 9}}
+          - {"foo": {"a": 3, "b": 4, "c": 5}, "bar": {"a": 6, "b": 7, "c": 8}}
+          - {"foo": {"a": 2, "b": 3, "c": 4}, "bar": {"a": 5, "b": 6, "c": 7}}
+          - {"foo": {"a": 1, "b": 2, "c": 3}, "bar": {"a": 4, "b": 5, "c": 6}}
+    expectations:
+      -
+        command_started_event:
+          command:
+            find: *collection_name

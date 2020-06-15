@@ -1,0 +1,51 @@
+database_name: "test"
+
+collection_name: &collection_name "nestedarrays"
+
+tests:
+-
+  description: "Aggregate on nested arrays with unwind, preserveNullAndEmptyArrays=true"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $unwind: {path: $a.b.c, preserveNullAndEmptyArrays: true, includeArrayIndex: a.b.idx}
+          - $project: { _id: 0 }
+          - $sort: { s: 1, a.b.c: 1 }
+  outcome:
+    result:
+      - { "a" : { "b" : { "c" : null, "idx" : null } } }
+      - { "a" : { "b" : { "c" : 1, "idx" : 0 } }, "s" : 1 }
+      - { "a" : { "b" : { "c" : 2, "idx" : 1 } }, "s" : 1 }
+      - { "a" : { "b" : { "c" : 3, "idx" : 2 } }, "s" : 1 }
+      - { "a" : { "b" : { "c" : 4, "idx" : 0 } }, "s" : 2 }
+      - { "a" : { "b" : { "c" : 5, "idx" : 1 } }, "s" : 2 }
+      - { "a" : { "b" : { "c" : 6, "idx" : 2 } }, "s" : 2 }
+      - { "a" : { "b" : { "idx" : null } }, "s" : 3 }
+      - { "a" : { "b" : { "idx" : null } }, "s" : 4 }
+      - { "a" : { "b" : { "c" : "hello", "idx" : null } }, "s" : 5 }
+      - { "a" : { "b" : { "c" : { "d" : 1 }, "idx" : null } }, "s" : 6 }
+      - { "s" : 7, "a" : { "b" : { "idx" : null } } }
+-
+  description: "Aggregate on nested arrays with unwind, preserveNullAndEmptyArrays=false"
+  operations:
+    -
+      object: collection
+      name: aggregate
+      arguments:
+        pipeline:
+          - $unwind: {path: $a.b.c, preserveNullAndEmptyArrays: false, includeArrayIndex: a.b.idx}
+          - $project: { _id: 0 }
+          - $sort: { s: 1, a.b.c: 1 }
+  outcome:
+    result:
+      - { "a" : { "b" : { "c" : 1, "idx" : 0 } }, "s" : 1 }
+      - { "a" : { "b" : { "c" : 2, "idx" : 1 } }, "s" : 1 }
+      - { "a" : { "b" : { "c" : 3, "idx" : 2 } }, "s" : 1 }
+      - { "a" : { "b" : { "c" : 4, "idx" : 0 } }, "s" : 2 }
+      - { "a" : { "b" : { "c" : 5, "idx" : 1 } }, "s" : 2 }
+      - { "a" : { "b" : { "c" : 6, "idx" : 2 } }, "s" : 2 }
+      - { "a" : { "b" : { "c" : "hello", "idx" : null } }, "s" : 5 }
+      - { "a" : { "b" : { "c" : { "d" : 1 }, "idx" : null } }, "s" : 6 }

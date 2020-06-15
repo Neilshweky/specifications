@@ -1,0 +1,418 @@
+{
+  "database_name": "test",
+  "collection_name": "arrays",
+  "tests": [
+    {
+      "description": "Aggregate on arrays (match, project)",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "aggregate",
+          "arguments": {
+            "pipeline": [
+              {
+                "$match": {
+                  "data": 2
+                }
+              },
+              {
+                "$project": {
+                  "_id": 0
+                }
+              }
+            ]
+          },
+          "result": [
+            {
+              "data": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "data": [
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Aggregate on arrays (match using $gt, project)",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "aggregate",
+          "arguments": {
+            "pipeline": [
+              {
+                "$match": {
+                  "data": {
+                    "$gt": 2
+                  }
+                }
+              },
+              {
+                "$project": {
+                  "_id": 0
+                }
+              }
+            ]
+          },
+          "result": [
+            {
+              "data": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "data": [
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "data": [
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "data": [
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "data": [
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Aggregate on arrays (project using $eq)",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "aggregate",
+          "arguments": {
+            "pipeline": [
+              {
+                "$project": {
+                  "_id": 0,
+                  "a": {
+                    "$eq": [
+                      "$data",
+                      2
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "result": [
+            {
+              "a": false
+            },
+            {
+              "a": false
+            },
+            {
+              "a": false
+            },
+            {
+              "a": false
+            },
+            {
+              "a": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Aggregate on arrays (project using $gt)",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "aggregate",
+          "arguments": {
+            "pipeline": [
+              {
+                "$project": {
+                  "_id": 0,
+                  "a": {
+                    "$gt": [
+                      "$data",
+                      2
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "result": [
+            {
+              "a": true
+            },
+            {
+              "a": true
+            },
+            {
+              "a": true
+            },
+            {
+              "a": true
+            },
+            {
+              "a": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Aggregate on arrays (project using $map, sort)",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "aggregate",
+          "arguments": {
+            "pipeline": [
+              {
+                "$project": {
+                  "_id": 0,
+                  "foo": {
+                    "$map": {
+                      "input": "$data",
+                      "as": "num",
+                      "in": {
+                        "$add": [
+                          "$$num",
+                          10
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "$sort": {
+                  "foo": 1
+                }
+              }
+            ]
+          },
+          "result": [
+            {
+              "foo": [
+                11,
+                12,
+                13
+              ]
+            },
+            {
+              "foo": [
+                12,
+                13,
+                14
+              ]
+            },
+            {
+              "foo": [
+                13,
+                14,
+                15
+              ]
+            },
+            {
+              "foo": [
+                14,
+                15,
+                16
+              ]
+            },
+            {
+              "foo": [
+                15,
+                16,
+                17
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Aggregate on arrays (project using $filter, sort)",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "aggregate",
+          "arguments": {
+            "pipeline": [
+              {
+                "$project": {
+                  "_id": 0,
+                  "foo": {
+                    "$filter": {
+                      "input": "$data",
+                      "as": "num",
+                      "cond": {
+                        "$gte": [
+                          "$$num",
+                          3
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "$sort": {
+                  "foo": 1
+                }
+              }
+            ]
+          },
+          "result": [
+            {
+              "foo": [
+                3
+              ]
+            },
+            {
+              "foo": [
+                3,
+                4
+              ]
+            },
+            {
+              "foo": [
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "foo": [
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "foo": [
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Aggregate on arrays (project using $reduce, sort)",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "aggregate",
+          "arguments": {
+            "pipeline": [
+              {
+                "$project": {
+                  "_id": 0,
+                  "foo": {
+                    "$reduce": {
+                      "input": "$data",
+                      "initialValue": 0,
+                      "in": {
+                        "$add": [
+                          "$$value",
+                          "$$this"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "$sort": {
+                  "foo": 1
+                }
+              }
+            ]
+          },
+          "result": [
+            {
+              "foo": 6
+            },
+            {
+              "foo": 9
+            },
+            {
+              "foo": 12
+            },
+            {
+              "foo": 15
+            },
+            {
+              "foo": 18
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Aggregate on arrays (project using array position, sort)",
+      "operations": [
+        {
+          "object": "collection",
+          "name": "aggregate",
+          "arguments": {
+            "pipeline": [
+              {
+                "$project": {
+                  "_id": 0,
+                  "data.1": 1
+                }
+              }
+            ]
+          },
+          "result": [
+            {
+              "data": []
+            },
+            {
+              "data": []
+            },
+            {
+              "data": []
+            },
+            {
+              "data": []
+            },
+            {
+              "data": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
