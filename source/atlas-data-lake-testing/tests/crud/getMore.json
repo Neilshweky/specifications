@@ -1,7 +1,6 @@
 {
-  "collection_name": "quux",
+  "collection_name": "driverdata",
   "database_name": "test",
-  "namespace": "test.quux",
   "tests": [
     {
       "description": "A successful find event with getMore",
@@ -31,7 +30,7 @@
         {
           "command_started_event": {
             "command": {
-              "find": "quux",
+              "find": "driverdata",
               "filter": {
                 "a": {
                   "$gte": 2
@@ -50,9 +49,6 @@
         {
           "command_started_event": {
             "command": {
-              "getMore": {
-                "$numberLong": "42"
-              },
               "batchSize": 1
             },
             "command_name": "getMore",

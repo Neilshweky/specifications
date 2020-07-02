@@ -18,37 +18,37 @@ tests:
       -
         name: runCommand
         arguments:
-          command: { count: "quux" }
+          command: { count: "driverdata" }
         object: collection
     expectations:
       -
         command_started_event:
           command:
-            count: "quux"
+            count: "driverdata"
   -
     description: "find succeeds using runCommand"
     operations:
       -
         name: runCommand
         arguments:
-          command: { find: "quux", projection: { _id: 0 }, sort: { year: 1, a: 1 }, skip: 2, limit: 2 }
+          command: { find: "driverdata", projection: { _id: 0 }, sort: { a: 1 }, skip: 2, limit: 2 }
         object: collection
     expectations:
       -
         command_started_event:
           command:
-            find: "quux"
+            find: "driverdata"
   -
     description: "aggregate succeeds using runCommand"
     operations:
       -
         name: runCommand
         arguments:
-          command: { aggregate: "quux", pipeline: [ { $group: { _id: 1, n: { $sum: 1 } } }, { $sort: { a: 1 } } ], cursor: { } }
+          command: { aggregate: "driverdata", pipeline: [ { $group: { _id: 1, n: { $sum: 1 } } }, { $sort: { a: 1 } } ], cursor: { } }
         object: collection
     expectations:
       -
         command_started_event:
           command:
-            aggregate: "quux"
+            aggregate: "driverdata"
 

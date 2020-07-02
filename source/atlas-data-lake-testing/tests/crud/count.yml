@@ -1,4 +1,4 @@
-collection_name: &collection_name "quux"
+collection_name: &collection_name "driverdata"
 database_name: &database_name "test"
 
 tests:

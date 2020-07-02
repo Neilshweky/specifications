@@ -1,6 +1,5 @@
-collection_name: &collection_name "quux"
+collection_name: &collection_name "driverdata"
 database_name: &database_name "test"
-namespace: &namespace "test.quux"
 
 tests:
   -
@@ -28,7 +27,6 @@ tests:
       -
         command_started_event:
           command:
-            getMore: { $numberLong: "42" }
             batchSize: 1
           command_name: "getMore"
           database_name: "cursors"

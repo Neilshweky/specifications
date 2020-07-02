@@ -30,7 +30,7 @@
           "name": "runCommand",
           "arguments": {
             "command": {
-              "count": "quux"
+              "count": "driverdata"
             }
           },
           "object": "collection"
@@ -40,7 +40,7 @@
         {
           "command_started_event": {
             "command": {
-              "count": "quux"
+              "count": "driverdata"
             }
           }
         }
@@ -53,12 +53,11 @@
           "name": "runCommand",
           "arguments": {
             "command": {
-              "find": "quux",
+              "find": "driverdata",
               "projection": {
                 "_id": 0
               },
               "sort": {
-                "year": 1,
                 "a": 1
               },
               "skip": 2,
@@ -72,7 +71,7 @@
         {
           "command_started_event": {
             "command": {
-              "find": "quux"
+              "find": "driverdata"
             }
           }
         }
@@ -85,7 +84,7 @@
           "name": "runCommand",
           "arguments": {
             "command": {
-              "aggregate": "quux",
+              "aggregate": "driverdata",
               "pipeline": [
                 {
                   "$group": {
@@ -111,7 +110,7 @@
         {
           "command_started_event": {
             "command": {
-              "aggregate": "quux"
+              "aggregate": "driverdata"
             }
           }
         }

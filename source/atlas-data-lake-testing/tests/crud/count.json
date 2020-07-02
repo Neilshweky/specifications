@@ -1,5 +1,5 @@
 {
-  "collection_name": "quux",
+  "collection_name": "driverdata",
   "database_name": "test",
   "tests": [
     {
@@ -15,7 +15,7 @@
         {
           "command_started_event": {
             "command": {
-              "count": "quux"
+              "count": "driverdata"
             }
           }
         }
